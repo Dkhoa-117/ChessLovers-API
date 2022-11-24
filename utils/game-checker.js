@@ -16,7 +16,7 @@ module.exports = {
 			}
 			return "On Going";
 		} else {
-			return "Error";
+			throw new Error("Can not load pgn");
 		}
 	},
 	makeAMove: (pgn, m) => {
@@ -29,7 +29,7 @@ module.exports = {
 				moves: game.pgn(),
 			};
 		} else {
-			return "Error";
+			throw new Error("Can not load pgn");
 		}
 	},
 };

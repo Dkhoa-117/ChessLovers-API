@@ -1,8 +1,8 @@
-const db = require("../utils/firebase-initialize");
+const { firestore } = require("../firebase");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError } = require("../errors");
 const { gameChecker, makeAMove } = require("../utils/game-checker");
-const asyncWrapper = require("../middlewares/async-wrapper");
+const asyncWrapper = require("../utils/async-wrapper");
 
 module.exports = {
 	PlayTheGame: asyncWrapper(async (req, res) => {
@@ -12,7 +12,7 @@ module.exports = {
 		// ? 	    move: "d4",
 		// ? 	}
 		const playerData = req.body;
-		const chessRef = db.collection("chessgame").doc(req.params.gameID);
+		const chessRef = firestore.collection("chessgame").doc(req.params.gameID);
 		const getDoc = await chessRef.get();
 		if (!playerData && !getDoc.exists) {
 			throw new BadRequestError("Bad Request!");
@@ -31,7 +31,7 @@ module.exports = {
 		res.status(StatusCodes.CREATED).json(chessgame);
 	}),
 	GetGame: asyncWrapper(async (req, res) => {
-		const chessRef = db.collection("chessgame").doc(req.params.gameID);
+		const chessRef = firestore.collection("chessgame").doc(req.params.gameID);
 		const getDoc = await chessRef.get();
 		if (!getDoc.exists) {
 			throw new BadRequestError("Bad Request!");
